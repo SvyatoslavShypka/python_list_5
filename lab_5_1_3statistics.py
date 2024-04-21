@@ -1,5 +1,4 @@
 import sys
-
 from lab_5_1_1 import get_user_from_log
 from read_log import read_log
 import random

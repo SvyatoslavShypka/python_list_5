@@ -1,7 +1,6 @@
 import argparse
 import sys
-
-from lab_5_1_3statistics import convert_str_to_datetime, calculate_ssh_connection_stats, \
+from lab_5_1_3statistics import calculate_ssh_connection_stats, \
     get_random_logs_for_user, calculate_user_login_frequency
 from read_log import read_log
 import logging
