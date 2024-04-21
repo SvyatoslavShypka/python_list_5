@@ -80,17 +80,22 @@ def calculate_user_login_frequency(lista_dict):
     user_logins = {}
     for slownik in lista_dict:
         user = get_user_from_log(slownik)
-        if user:
+        if user and "session opened for user" in slownik.get("message"):
             if user in user_logins:
                 user_logins[user] += 1
             else:
                 user_logins[user] = 1
-
     if not user_logins:
         return None, None
 
     min_login_user = min(user_logins, key=user_logins.get)
     max_login_user = max(user_logins, key=user_logins.get)
+
+    if min_login_user is not None and max_login_user is not None:
+        print("Użytkownik, który najżadziej logował się: ", min_login_user)
+        print("Użytkownik, który najczęściej logował się: ", max_login_user)
+    else:
+        print("Logowań nie było")
 
     return min_login_user, max_login_user
 
@@ -113,8 +118,3 @@ if __name__ == "__main__":
 
     # 1.3.3
     min_login_user, max_login_user = calculate_user_login_frequency(lista_dict)
-    if min_login_user is not None and max_login_user is not None:
-        print("User who logged in least frequently:", min_login_user)
-        print("User who logged in most frequently:", max_login_user)
-    else:
-        print("No user login frequencies found.")
