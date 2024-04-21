@@ -11,14 +11,30 @@ def get_ipv4s_from_log(slownik):
     return lista_adresow
 
 
-# def get_user_from_log(slownik):
+def get_user_from_log(slownik):
+    lista_users = []
+    user_patterns = [
+        r"Accepted password for (\w+)",
+        r"Failed password for (?:invalid user )?(\w+)",
+        r"Invalid user\s+(\w+)",
+        r"for user\s+(\w+)",
+        r"user=(\w+)",
+        r"input_userauth_request: invalid user (\w+) \[preauth\]"
+    ]
 
+    for pattern in user_patterns:
+        matches = re.findall(pattern, slownik.get("message"))
+        for match in matches:
+            lista_users.append(match)
+    if not lista_users:
+        lista_users.append(None)
+    return lista_users
 
 
 if __name__ == "__main__":
     lista_dict = read_log()
     # 1.1.1 testowy wydruk     type OpenSSH_2k.log | python lab_5_1_1.py
     for slownik in lista_dict:
-        print(slownik)
-        print(get_ipv4s_from_log(slownik))
-        # print(get_user_from_log(slownik))
+        print(slownik.get("message"))
+        # print(get_ipv4s_from_log(slownik))
+        print(get_user_from_log(slownik))
