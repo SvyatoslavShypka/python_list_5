@@ -15,15 +15,12 @@ def cli():
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
-    # Subcommand for getting random logs for a user
-    random_logs_parser = subparsers.add_parser("random_logs", help="Get random logs for a user")
+    # Subcommand
+    random_logs_parser = subparsers.add_parser("random_logs", help="Losowe wpisy")
+    # Subcommand's arguments
     random_logs_parser.add_argument("user", help="Użytkownik, po któremu szukamy logi")
     random_logs_parser.add_argument("n", type=int, help="Ilość losowo wybranych wpisów lub 0 dla wszystkich")
-
-    # Subcommand for calculating SSH connection stats
     connection_stats_parser = subparsers.add_parser("connection_stats", help="Oblilczenie statystyki sesii SSH")
-
-    # Subcommand for calculating user login frequency
     login_frequency_parser = subparsers.add_parser("login_frequency", help="Obliczenie częstotliwości logowania")
 
     args = parser.parse_args()
@@ -42,7 +39,7 @@ def cli():
     console_error_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
     logging.getLogger('').addHandler(console_error_handler)
 
-    # Read the log file
+    # Wczytujemy logi
     log_entries = read_log(args.log_file)
     if not args.command:
         for slownik in log_entries:
@@ -58,7 +55,7 @@ def cli():
             elif "POSSIBLE BREAK-IN ATTEMPT".lower() in slownik.get("message").lower():
                 logging.critical("Wykryto próbę włamania")
 
-    # Perform the requested action based on the subcommand
+    # Jeżeli są subcommands - odpalamy dodatkowe funkcje
     if args.command == "random_logs":
         random_logs = get_random_logs_for_user(log_entries, args.user, args.n)
         for log in random_logs:
