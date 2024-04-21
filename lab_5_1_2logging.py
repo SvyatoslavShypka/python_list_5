@@ -19,7 +19,7 @@ console_error_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)
 logging.getLogger('').addHandler(console_error_handler)
 
 if __name__ == "__main__":
-    lista_dict = read_log()
+    lista_dict = read_log(None)
     for slownik in lista_dict:
         logging.debug("Przeczytano %d bajtów", len(slownik.get("message")))
         if "Accepted password" in slownik.get("message") or "session opened for user" in slownik.get("message"):
@@ -32,3 +32,5 @@ if __name__ == "__main__":
             logging.error("Wystąpił błąd")
         elif "POSSIBLE BREAK-IN ATTEMPT".lower() in slownik.get("message").lower():
             logging.critical("Wykryto próbę włamania")
+
+    # 5.1.2 testowy wydruk     type SSH.log | python lab_5_1_2logging.py

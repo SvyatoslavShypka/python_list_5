@@ -1,8 +1,8 @@
-from lab_5_1_1 import get_ipv4s_from_log
+import sys
+
 from lab_5_1_1 import get_user_from_log
 from read_log import read_log
 import random
-import re
 from datetime import datetime
 import statistics
 
@@ -19,7 +19,7 @@ def calculate_ssh_connection_stats(lista_dict):
     open_list = []
     close_list = []
 
-    # Podział wpisów na listy otwierające i zamykające sesję
+    # Tworzymy listy otwierające i zamykające sesję
     for slownik in lista_dict:
         message = slownik.get("message")
         if "session opened for user" in message:
@@ -40,9 +40,9 @@ def calculate_ssh_connection_stats(lista_dict):
                 # Usuwamy wpis zamykający sesję, aby nie był używany ponownie
                 close_list.remove(close_entry)
                 break
-
     # Obliczanie średniej długości trwania sesji dla każdego użytkownika
     user_avg_durations = {}
+    # Obliczanie odchylenia
     user_dev_durations = {}
     all_user_stat = []
     for user, sessions in user_sessions.items():
@@ -101,17 +101,20 @@ def calculate_user_login_frequency(lista_dict):
 
 
 if __name__ == "__main__":
-    lista_dict = read_log()
-
-    # Test
-    # type SSH.log | python lab_5_1_3statistics.py
-    # 1.3.1
-    user = "root"
-    iloscWpisow = 2
+    lista_dict = read_log(None)
+    if len(sys.argv) > 2:
+        user = sys.argv[1]
+        iloscWpisow = int(sys.argv[2])
+    else:
+        user = "root"
+        iloscWpisow = 2
     random_logs = get_random_logs_for_user(lista_dict, user, iloscWpisow)
     print(f"Random logs for user {user}:")
     for log in random_logs:
         print(log)
+    # Test
+    # type SSH.log | python lab_5_1_3statistics.py curi 4
+    # 1.3.1
 
     # 1.3.2
     calculate_ssh_connection_stats(lista_dict)

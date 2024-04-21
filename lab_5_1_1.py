@@ -31,8 +31,8 @@ def get_user_from_log(slownik):
 
 
 if __name__ == "__main__":
-    lista_dict = read_log()
-    # 5.1.1.1 testowy wydruk     type OpenSSH_2k.log | python lab_5_1_1.py
+    lista_dict = read_log(None)
+    # 5.1.1.1 testowy wydruk     type SSH.log | python lab_5_1_1.py
     for slownik in lista_dict:
         print(slownik.get("message"))
         # 5.1.1.2
