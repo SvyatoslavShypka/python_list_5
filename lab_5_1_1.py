@@ -33,8 +33,10 @@ def get_user_from_log(slownik):
 
 if __name__ == "__main__":
     lista_dict = read_log()
-    # 1.1.1 testowy wydruk     type OpenSSH_2k.log | python lab_5_1_1.py
+    # 5.1.1.1 testowy wydruk     type OpenSSH_2k.log | python lab_5_1_1.py
     for slownik in lista_dict:
         print(slownik.get("message"))
-        # print(get_ipv4s_from_log(slownik))
+        # 5.1.1.2
+        print(get_ipv4s_from_log(slownik))
+        # 5.1.1.3
         print(get_user_from_log(slownik))
