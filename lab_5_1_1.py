@@ -21,14 +21,13 @@ def get_user_from_log(slownik):
         r"user=(\w+)",
         r"input_userauth_request: invalid user (\w+) \[preauth\]"
     ]
-
     for pattern in user_patterns:
         matches = re.findall(pattern, slownik.get("message"))
         for match in matches:
             lista_users.append(match)
     if not lista_users:
         lista_users.append(None)
-    return lista_users
+    return lista_users[0]
 
 
 if __name__ == "__main__":
