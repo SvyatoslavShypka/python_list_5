@@ -31,10 +31,11 @@ def calculate_ssh_connection_stats(lista_dict):
     user_sessions = {}
     for open_entry in open_list:
         user = get_user_from_log(open_entry)
+        user_pid = open_entry.get("PID")
         if user not in user_sessions:
             user_sessions[user] = []
         for close_entry in close_list:
-            if get_user_from_log(close_entry) == user:
+            if get_user_from_log(close_entry) == user and user_pid == close_entry.get("PID"):
                 user_sessions[user].append((open_entry.get("date"), close_entry.get("date")))
                 # Usuwamy wpis zamykający sesję, aby nie był używany ponownie
                 close_list.remove(close_entry)
@@ -54,14 +55,14 @@ def calculate_ssh_connection_stats(lista_dict):
             all_user_stat.append(duration.total_seconds())
         if durations:
             user_avg_durations[user] = statistics.mean(durations)
-            print(f"Średni czas trwania sesji po użytkowniku {user}: {user_avg_durations[user]} sekund")
+            print(f"Średni czas trwania sesji po użytkowniku {user}: {round(user_avg_durations[user])} sekund")
             if len(durations) > 1:
                 user_dev_durations[user] = statistics.stdev(durations)
-                print(f"Odchylenie standardowe czasu trwania sesji po użytkowniku {user}: {user_dev_durations[user]} sekund")
+                print(f"Odchylenie standardowe czasu trwania sesji po użytkowniku {user}: {round(user_dev_durations[user])} sekund")
             else:
                 print(f"Odchylenie standardowe czasu trwania sesji po użytkowniku {user}: nie może być obliczone")
-    print(f"Średni czas trwania sesji ze wszystkich logów: {statistics.mean(all_user_stat)}")
-    print(f"Odchylenie standardowe czasu trwania sesji ze wszystkich logów: {statistics.stdev(all_user_stat)}")
+    print(f"Średni czas trwania sesji ze wszystkich logów: {round(statistics.mean(all_user_stat))} sekund")
+    print(f"Odchylenie standardowe czasu trwania sesji ze wszystkich logów: {round(statistics.stdev(all_user_stat))} sekund")
 
 
 def convert_str_to_datetime(date_str):
@@ -97,6 +98,8 @@ def calculate_user_login_frequency(lista_dict):
 if __name__ == "__main__":
     lista_dict = read_log()
 
+    # Test
+    # type SSH.log | python lab_5_1_3statistics.py
     # 1.3.1
     user = "root"
     iloscWpisow = 2
@@ -107,12 +110,6 @@ if __name__ == "__main__":
 
     # 1.3.2
     calculate_ssh_connection_stats(lista_dict)
-    # mean_duration, stdev_duration = calculate_ssh_connection_stats(lista_dict)
-    # if mean_duration is not None and stdev_duration is not None:
-    #     print("Mean duration of SSH connections:", mean_duration)
-    #     print("Standard deviation of SSH connection duration:", stdev_duration)
-    # else:
-    #     print("No SSH connection durations found.")
 
     # 1.3.3
     min_login_user, max_login_user = calculate_user_login_frequency(lista_dict)

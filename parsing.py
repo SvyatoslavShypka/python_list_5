@@ -4,7 +4,7 @@ import re
 def parsing_line(log_line):
     date_pattern = r'\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}'
     hostname_pattern = r'\w+'
-    process_info_pattern = r'(sshd\[\d+\]):'
+    process_info_pattern = r'sshd\[(\d+)\]:'
     message = r'.*'
 
     full_pattern = f'({date_pattern}) ({hostname_pattern}) {process_info_pattern} ({message})'
