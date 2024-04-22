@@ -30,6 +30,32 @@ def get_user_from_log(slownik):
     return lista_users[0]
 
 
+def get_message_type(slownik):
+    result = ''
+    pattern_success = r"Accepted password"
+    pattern_failed = r"authentication failure"
+    pattern_closed_session = r"session closed"
+    pattern_invalid_user = r"[I|i]nvalid user"
+    pattern_invalid_password = r"Failed password"
+    pattern_break_attempt = r"BREAK-IN ATTEMPT"
+    if pattern_success in slownik.get("message"):
+        result = "Zdarzenie dotyczy udanego logowania"
+    elif pattern_failed in slownik.get("message"):
+        result = "Zdarzenie dotyczy nieudanego logowania"
+    elif pattern_closed_session in slownik.get("message"):
+        result = "Zdarzenie dotyczy zamknięcia sesji"
+    elif pattern_invalid_user in slownik.get("message"):
+        result = "Zdarzenie dotyczy blędnego użytkownika"
+    elif pattern_invalid_password in slownik.get("message"):
+        result = "Zdarzenie dotyczy blędnego hasła"
+    elif pattern_break_attempt in slownik.get("message"):
+        result = "Zdarzenie dotyczy próby włamania"
+    else:
+        result = "inne"
+
+    return result
+
+
 if __name__ == "__main__":
     lista_dict = read_log(None)
     # 5.1.1.1 testowy wydruk     type SSH.log | python lab_5_1_1.py
@@ -39,3 +65,5 @@ if __name__ == "__main__":
         print(get_ipv4s_from_log(slownik))
         # 5.1.1.3
         print(get_user_from_log(slownik))
+        # 5.1.1.4
+        print(get_message_type(slownik))
